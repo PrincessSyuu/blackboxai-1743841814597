@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        #driverMap { height: 400px; }
+        .ride-card {
+            transition: all 0.3s ease;
+        }
+        .ride-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-black text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">RideShare Driver</h1>
+            <nav>
+                <a href="index.html" class="text-white hover:text-gray-300 ml-4">
+                    <i class="fas fa-user mr-1"></i>Rider Mode
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 mt-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                    <h2 class="text-xl font-semibold mb-4">Your Location</h2>
+                    <div id="driverMap" class="rounded-lg"></div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">Ride Requests</h2>
+                    <div id="rideRequests" class="space-y-4">
+                        <!-- Ride requests will be populated by JavaScript -->
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-car-side text-4xl mb-2"></i>
+                            <p>Waiting for ride requests...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="bg-white p-6 rounded-lg shadow-md sticky top-4">
+                    <h2 class="text-xl font-semibold mb-4">Driver Status</h2>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-medium">Availability:</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="availabilityToggle" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                        </label>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="font-medium mb-2">Today's Stats</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <p class="text-sm text-gray-500">Completed Rides</p>
+                                <p class="text-xl font-bold">0</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <p class="text-sm text-gray-500">Earnings</p>
+                                <p class="text-xl font-bold">$0.00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <h3 class="font-medium mb-2">Your Info</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-300 rounded-full mr-3 flex items-center justify-center">
+                                <i class="fas fa-user text-xl text-gray-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium">Driver Name</p>
+                                <p class="text-sm text-gray-600">4.8 ★ (24 ratings)</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <p><i class="fas fa-car mr-2 text-gray-500"></i> Vehicle: Toyota Camry</p>
+                            <p><i class="fas fa-id-card mr-2 text-gray-500"></i> License: *********</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Ride Request Modal Template -->
+    <template id="rideRequestTemplate">
+        <div class="ride-card bg-white border border-gray-200 rounded-lg p-4">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <h3 class="font-medium">Ride Request</h3>
+                    <p class="text-sm text-gray-600">2.3 miles away</p>
+                </div>
+                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">New</span>
+            </div>
+            <div class="flex items-center mb-3">
+                <div class="w-10 h-10 bg-gray-200 rounded-full mr-3 flex items-center justify-center">
+                    <i class="fas fa-user text-gray-500"></i>
+                </div>
+                <div>
+                    <p class="font-medium">Passenger Name</p>
+                    <p class="text-sm text-gray-600">4.9 ★ (45 ratings)</p>
+                </div>
+            </div>
+            <div class="flex items-center text-sm mb-4">
+                <div class="w-1/2 pr-2">
+                    <p class="text-gray-500">From</p>
+                    <p class="truncate">123 Main St</p>
+                </div>
+                <div class="w-1/2 pl-2">
+                    <p class="text-gray-500">To</p>
+                    <p class="truncate">456 Oak Ave</p>
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <button class="decline-ride flex-1 py-2 border border-gray-300 rounded-lg text-gray-700">
+                    Decline
+                </button>
+                <button class="accept-ride flex-1 py-2 bg-black text-white rounded-lg">
+                    Accept
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Google Maps API -->
+    <!-- Replace YOUR_API_KEY with actual key from https://console.cloud.google.com -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    <script>
+        // Driver Dashboard Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize driver map
+            const driverMap = new google.maps.Map(document.getElementById("driverMap"), {
+                center: { lat: 37.7749, lng: -122.4194 },
+                zoom: 14
+            });
+
+            // Add driver marker
+            new google.maps.Marker({
+                position: { lat: 37.7749, lng: -122.4194 },
+                map: driverMap,
+                icon: {
+                    url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                },
+                title: "Your Location"
+            });
+
+            // Simulate incoming ride requests
+            const rideRequests = [
+                {
+                    id: 1,
+                    passenger: "Alex Johnson",
+                    rating: 4.9,
+                    pickup: "123 Market St, San Francisco",
+                    dropoff: "456 Mission St, San Francisco",
+                    distance: "1.2 miles",
+                    fare: "$12.50"
+                },
+                {
+                    id: 2,
+                    passenger: "Maria Garcia",
+                    rating: 4.8,
+                    pickup: "789 Castro St, San Francisco",
+                    dropoff: "101 Union St, San Francisco",
+                    distance: "2.5 miles",
+                    fare: "$18.75"
+                }
+            ];
+
+            // Display ride requests after delay
+            setTimeout(() => {
+                const rideRequestsContainer = document.getElementById('rideRequests');
+                const template = document.getElementById('rideRequestTemplate');
+                
+                rideRequestsContainer.innerHTML = '';
+                
+                rideRequests.forEach(request => {
+                    const clone = template.content.cloneNode(true);
+                    
+                    // Update template with request data
+                    clone.querySelector('h3').textContent = `Ride to ${request.dropoff.split(',')[0]}`;
+                    clone.querySelector('.text-gray-600').textContent = `${request.distance} away`;
+                    clone.querySelectorAll('p.font-medium')[1].textContent = request.passenger;
+                    clone.querySelectorAll('p.text-gray-600')[1].textContent = `${request.rating} ★`;
+                    clone.querySelectorAll('p.truncate')[0].textContent = request.pickup;
+                    clone.querySelectorAll('p.truncate')[1].textContent = request.dropoff;
+                    
+                    // Add event listeners
+                    clone.querySelector('.accept-ride').addEventListener('click', () => {
+                        alert(`You accepted the ride from ${request.passenger}!`);
+                        // In real app, would update UI and navigate to ride view
+                    });
+                    
+                    clone.querySelector('.decline-ride').addEventListener('click', () => {
+                        const rideCard = clone.querySelector('.ride-card');
+                        rideCard.style.opacity = '0';
+                        setTimeout(() => rideCard.remove(), 300);
+                    });
+                    
+                    rideRequestsContainer.appendChild(clone);
+                });
+            }, 2000);
+
+            // Toggle availability
+            document.getElementById('availabilityToggle').addEventListener('change', function() {
+                const status = this.checked ? 'available' : 'unavailable';
+                console.log(`Driver is now ${status}`);
+                // In real app, would update driver status in backend
+            });
+        });
+    </script>
+</body>
+</html>
