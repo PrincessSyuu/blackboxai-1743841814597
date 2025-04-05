@@ -6,11 +6,60 @@ let pickupAutocomplete;
 let dropoffAutocomplete;
 let currentRide = null;
 
-// Sample driver data (would come from API in real app)
+// Driver tracking functionality
+let driverMarkers = [];
+let watchId = null;
+
+// Initialize driver tracking
+function initDriverTracking() {
+    if (navigator.geolocation) {
+        watchId = navigator.geolocation.watchPosition(
+            position => {
+                const driverLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                updateDriverPosition(driverLocation);
+            },
+            error => console.error('Geolocation error:', error),
+            { enableHighAccuracy: true }
+        );
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function updateDriverPosition(location) {
+    // Clear existing markers
+    driverMarkers.forEach(marker => marker.setMap(null));
+    driverMarkers = [];
+
+    // Add new marker
+    const marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        icon: {
+            url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+            scaledSize: new google.maps.Size(40, 40)
+        },
+        title: "Your Location"
+    });
+    driverMarkers.push(marker);
+
+    // Center map on driver
+    map.setCenter(location);
+}
+
+// Sample driver data with real-time tracking
 const drivers = [
-    { id: 1, name: "John", location: { lat: 37.7749, lng: -122.4194 }, vehicle: "Sedan", rating: 4.8 },
-    { id: 2, name: "Sarah", location: { lat: 37.7755, lng: -122.4189 }, vehicle: "SUV", rating: 4.9 },
-    { id: 3, name: "Mike", location: { lat: 37.7739, lng: -122.4199 }, vehicle: "Luxury", rating: 4.7 }
+    { 
+        id: 1, 
+        name: "John", 
+        getLocation: () => ({ lat: 37.7749 + Math.random()*0.01, lng: -122.4194 + Math.random()*0.01 }), 
+        vehicle: "Sedan", 
+        rating: 4.8 
+    },
+    // ... other drivers
 ];
 
 // Initialize the app when DOM loads
