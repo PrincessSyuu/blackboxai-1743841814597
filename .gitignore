@@ -1,0 +1,48 @@
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# IDE specific files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Build directories
+dist/
+build/
+out/
+
+# Cache directories
+.cache/
+
+# Dependency directories
+jspm_packages/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# API keys
+*.key
+*.pem
+
+# Google Maps API key (if stored in separate file)
+api-keys.js
